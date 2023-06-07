@@ -11,15 +11,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(3)
   const [copiedQuote, setCopiedQuote] = useState(null)
-  const url = "https://zenquotes.io/api/random"
-  const proxy = "https://cors-anywhere.herokuapp.com/"
+  // const url = "https://zenquotes.io/api/random"
+  // const proxy = "https://cors-anywhere.herokuapp.com/"
 
   const fetchQuote = () => {
     setIsLoading(true)
-    setCountdown(3)
+    setCountdown(2)
 
     setTimeout(() => {
-      fetch(proxy + url)
+      fetch("https://api.api-ninjas.com/v1/quotes", {
+        headers: { "X-Api-Key": "kWSZl05zxFblZiGhJA5BeA==5krAHMWX7q6zlC1u" },
+      })
         .then((res) => res.json())
         .then((data) => {
           setQuotes(data)
@@ -29,7 +31,7 @@ function App() {
           console.error("Error fetching quote:", error)
           setIsLoading(false)
         })
-    }, 3000)
+    }, 2000)
   }
 
   const copyToClipboard = (text) => {
@@ -38,7 +40,7 @@ function App() {
 
     setTimeout(() => {
       setCopiedQuote(null)
-    }, 1000)
+    }, 2000)
   }
 
   useEffect(() => {
@@ -75,11 +77,11 @@ function App() {
               className="copy-btn"
               disabled={quotes.length === 0}
               onClick={() =>
-                copyToClipboard(quotes[0]?.q + " -" + quotes[0]?.a)
+                copyToClipboard(quotes[0]?.quote + " -" + quotes[0]?.author)
               }
               startIcon={<CopyIcon />}
             >
-              {copiedQuote === quotes[0]?.q + " -" + quotes[0]?.a
+              {copiedQuote === quotes[0]?.quote + " -" + quotes[0]?.author
                 ? "Copied!"
                 : "Copy"}
             </Button>
@@ -96,10 +98,10 @@ function App() {
               key={idx}
             >
               <Typography variant="h5" className="quote-text">
-                {quote.q}
+                {quote.quote}
               </Typography>
               <Typography variant="body1" className="author-text">
-                - {quote.a}
+                - {quote.author}
               </Typography>
             </div>
           ))
